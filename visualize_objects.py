@@ -1,6 +1,7 @@
 import numpy as np
 from pydrake.geometry import ConnectDrakeVisualizer
 from pydrake.geometry.render import (
+    CameraProperties,
     DepthCameraProperties,
     MakeRenderEngineVtk,
     RenderEngineVtkParams,
@@ -19,39 +20,36 @@ from pydrake.systems.meshcat_visualizer import (
 )
 from pydrake.perception import DepthImageToPointCloud
 
-enable_collision=True
-enable_camera=True
 
-if enable_collision:
-    model_path = './models_old/{0}/sdf/{0}.sdf'
-else:
-    model_path = './models_old/{0}/sdf/{0}_nc.sdf'
+enable_camera=True
+model_path = './models/{0}/sdf/{0}.sdf'
 
 dt_file = model_path.format('plane')
 cracker_box_file = model_path.format('003_cracker_box')
 tomato_soup_can_file = model_path.format('005_tomato_soup_can')
 mustard_bottle_file = model_path.format('006_mustard_bottle')
 
-order = [[3,5,6,6,5], [5,6,5,5,5,5,3], [6,6,5,6]]
+#order = [[3,5,6,6,5], [5,6,5,5,5,5,3], [6,6,5,6]]
+order = [[3], [5], [6]]
 
-poses = [[  {'pos':[-0.15,0.2,0.12], 'ori':[0.,0.,0.]},
-            {'pos':[-0.06,0.15,0.06], 'ori':[0.,0.,0.]},
-            {'pos':[0.02,0.16,0.11], 'ori':[0.,0.,0.]},
-            {'pos':[0.09,0.16,0.11], 'ori':[0.,0.,0.]},
-            {'pos':[-0.06,0.23,0.06], 'ori':[0.,0.,0.]}  ],
+poses = [[  {'pos':[-0.15,0.2,0.125], 'ori':[0.,0.,0.]},
+            {'pos':[-0.06,0.15,0.065], 'ori':[0.,0.,0.]},
+            {'pos':[0.02,0.16,0.115], 'ori':[0.,0.,0.]},
+            {'pos':[0.09,0.16,0.115], 'ori':[0.,0.,0.]},
+            {'pos':[-0.06,0.23,0.065], 'ori':[0.,0.,0.]}  ],
 
-         [  {'pos':[-0.15,-0.06,0.06], 'ori':[0.,0.,0.]},
-            {'pos':[-0.16,0.04,0.11], 'ori':[0.,0.,0.]},
-            {'pos':[-0.08,0.02,0.06], 'ori':[0.,0.,0.]},
-            {'pos':[-0.07,-0.06,0.06], 'ori':[0.,0.,0.]},
-            {'pos':[0.,0.02,0.06], 'ori':[0.,0.,0.]},
-            {'pos':[ 0.01,-0.06,0.06], 'ori':[0.,0.,0.]},
-            {'pos':[ 0.1,-0.01,0.12], 'ori':[0.,0.,0.]}   ],
+         [  {'pos':[-0.15,-0.06,0.065], 'ori':[0.,0.,0.]},
+            {'pos':[-0.16,0.04,0.115], 'ori':[0.,0.,0.]},
+            {'pos':[-0.08,0.02,0.065], 'ori':[0.,0.,0.]},
+            {'pos':[-0.07,-0.06,0.065], 'ori':[0.,0.,0.]},
+            {'pos':[0.,0.02,0.065], 'ori':[0.,0.,0.]},
+            {'pos':[ 0.01,-0.06,0.065], 'ori':[0.,0.,0.]},
+            {'pos':[ 0.1,-0.01,0.125], 'ori':[0.,0.,0.]}   ],
 
-         [  {'pos':[-0.16,-0.24,0.11], 'ori':[0.,0.,0.]},
-            {'pos':[-0.08,-0.24,0.11], 'ori':[0.,0.,0.]},
-            {'pos':[-0.01,-0.25,0.06], 'ori':[0.,0.,0.]},
-            {'pos':[ 0.06,-0.24,0.11], 'ori':[0.,0.,0.]} ]
+         [  {'pos':[-0.16,-0.24,0.115], 'ori':[0.,0.,0.]},
+            {'pos':[-0.08,-0.24,0.115], 'ori':[0.,0.,0.]},
+            {'pos':[-0.01,-0.25,0.065], 'ori':[0.,0.,0.]},
+            {'pos':[ 0.06,-0.24,0.115], 'ori':[0.,0.,0.]} ]
          ]
 
 builder = DiagramBuilder()
@@ -88,10 +86,11 @@ if enable_camera:
             self.reference_object_frame = "plane_base"
             self.reference_object = "plane"
 
-    camera = Camera('camera', [-0.05, 0., 1.1, 190.0, 0.0, -90.0])
+    camera = Camera('camera', [-0.79, 0., 0.6, 220.0, 0.0, -90.0])
     camera_images_rgb = {}
     camera_images_depth = {}
 
+    color_prop = CameraProperties(width=640, height=480, fov_y=np.pi/4,renderer_name="renderer")
     depth_prop = DepthCameraProperties(width=640, height=480, fov_y=np.pi/4, renderer_name="renderer", z_near=0.01, z_far=10.)
     world_id = plant.GetBodyFrameIdOrThrow(plant.world_body().index())
     frame_id = None
@@ -105,7 +104,7 @@ if enable_camera:
                 frame_id = plant.GetBodyFrameIdOrThrow(idx)
     if frame_id is None:
         frame_id = world_id
-    camera_instance = RgbdSensor(frame_id, X_PB=camera.pose, color_properties=depth_prop, depth_properties=depth_prop)
+    camera_instance = RgbdSensor(frame_id, X_PB=camera.pose, color_properties=color_prop, depth_properties=depth_prop)
     camera_instance.set_name(camera.name)
     builder.AddSystem(camera_instance)
     builder.Connect(scene_graph.get_query_output_port(), camera_instance.query_object_input_port())
@@ -154,14 +153,15 @@ plant_context = diagram.GetMutableSubsystemContext(plant, simulator.get_mutable_
 for sku_instant, pose in zip(sku_intances, poses):
     for ins, p in zip(sku_instant, pose):
         set_object_pose(ins, plant_context, xyz_rpy_deg(p['pos'], p['ori']))
-
-                     
+         
 def camera_main():
     sim_time = 0
-    step = 0.0001
+    step = 0.001
     while True:
         sim_time += step
+        #print("sim_time", sim_time)
         simulator.AdvanceTo(sim_time)
+
 
 if __name__ == '__main__':
     if enable_camera:

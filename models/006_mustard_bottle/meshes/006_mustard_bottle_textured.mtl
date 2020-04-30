@@ -1,6 +1,5 @@
 newmtl material_0
 # shader_type beckmann
 map_Kd 006_mustard_bottle_textured.png
-map_Ka 006_mustard_bottle_textured.png
 
 

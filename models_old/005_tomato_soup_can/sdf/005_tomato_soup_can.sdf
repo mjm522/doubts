@@ -50,9 +50,119 @@
       points around the face).  However, for arbitrary grip configuration, the
       slightly inset volume will provide contact with a *slight* offset (in
       this case a deviation of 0.001 m from the visual surface).
-     -->
+    
+
+   <visual name='box_collision_v'>
+      <pose>0 0 0 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <radius>0.031850</radius>
+          <length>0.099900</length>
+        </cylinder>
+      </geometry>
+      <material>
+        <diffuse>0 1 0 1.0</diffuse>
+      </material>
+    </visual>
+
+   <visual name='point_collision_t1v'>
+   <pose frame=''>0.0 0.03 0.04 0 0 0</pose>
+      <geometry>
+          <sphere>
+		<radius>1e-2</radius>
+	</sphere>
+      </geometry>
+	<material>
+           <diffuse>0.0 1. 0. 1.0</diffuse>
+        </material>
+    </visual>
+
+   <visual name='point_collision_t2v'>
+   <pose frame=''>0.0 -0.03 0.04 0 0 0</pose>
+      <geometry>
+          <sphere>
+		<radius>1e-2</radius>
+	</sphere>
+      </geometry>
+	<material>
+           <diffuse>0.0 1. 0. 1.0</diffuse>
+        </material>
+    </visual>
+	
+   <visual name='point_collision_t3v'>
+   <pose frame=''>-0.03 0.0 0.04 0 0 0</pose>
+      <geometry>
+          <sphere>
+		<radius>1e-2</radius>
+	</sphere>
+      </geometry>
+	<material>
+           <diffuse>0.0 1. 0. 1.0</diffuse>
+        </material>
+    </visual>
+
+   <visual name='point_collision_t4v'>
+   <pose frame=''>0.03 0.0 0.04 0 0 0</pose>
+      <geometry>
+          <sphere>
+		<radius>1e-2</radius>
+	</sphere>
+      </geometry>
+	<material>
+           <diffuse>0.0 1. 0. 1.0</diffuse>
+        </material>
+    </visual>
+
+   <visual name='point_collision_b4v'>
+   <pose frame=''>0.03 0.0 -0.04 0 0 0</pose>
+      <geometry>
+          <sphere>
+		<radius>1e-2</radius>
+	</sphere>
+      </geometry>
+	<material>
+           <diffuse>0.0 1. 0. 1.0</diffuse>
+        </material>
+    </visual>
+ 
+    <visual name='point_collision_b3v'>
+   <pose frame=''>-0.03 0.0 -0.04 0 0 0</pose>
+      <geometry>
+          <sphere>
+		<radius>1e-2</radius>
+	</sphere>
+      </geometry>
+	<material>
+           <diffuse>0.0 1. 0. 1.0</diffuse>
+        </material>
+    </visual>
+
+    <visual name='point_collision_b2v'>
+   <pose frame=''>0.0 0.03 -0.04 0 0 0</pose>
+      <geometry>
+          <sphere>
+		<radius>1e-2</radius>
+	</sphere>
+      </geometry>
+	<material>
+           <diffuse>0.0 1. 0. 1.0</diffuse>
+        </material>
+    </visual>
+
+    <visual name='point_collision_b1v'>
+   <pose frame=''>0.0 -0.03 -0.04 0 0 0</pose>
+      <geometry>
+          <sphere>
+		<radius>1e-2</radius>
+	</sphere>
+      </geometry>
+	<material>
+           <diffuse>0.0 1. 0. 1.0</diffuse>
+        </material>
+    </visual>
+ -->
     <collision name='box_collision'>
-      <pose>0 0 0 -1.57 0 0</pose>
+      <pose>0 0 0 0 0 0</pose>
       <geometry>
         <cylinder>
           <radius>0.031850</radius>
@@ -64,61 +174,62 @@
       </material>
     </collision>
 
-    <collision name='point_collision1'>
-      <pose>0.016425 0.050450 0.016425 0 0 0 </pose>
+  <collision name='point_collision1'>
+      <pose>0.0 0.03 0.04 0 0 0</pose>
       <geometry>
         <sphere><radius>1e-7</radius></sphere>
       </geometry>
     </collision>
 
     <collision name='point_collision2'>
-      <pose>0.016425 -0.050450 0.016425 0 0 0 </pose>
+      <pose>0.0 -0.03 0.04 0 0 0</pose>
       <geometry>
         <sphere><radius>1e-7</radius></sphere>
       </geometry>
     </collision>
 
     <collision name='point_collision3'>
-      <pose>-0.016425 0.050450 0.016425 0 0 0 </pose>
+      <pose>0.03 0.0 0.04 0 0 0</pose>
       <geometry>
         <sphere><radius>1e-7</radius></sphere>
       </geometry>
     </collision>
 
     <collision name='point_collision4'>
-      <pose>-0.016425 -0.050450 0.016425 0 0 0 </pose>
+      <pose>-0.03 0.0 0.04 0 0 0</pose>
       <geometry>
         <sphere><radius>1e-7</radius></sphere>
       </geometry>
     </collision>
 
     <collision name='point_collision5'>
-      <pose>0.016425 0.050450 -0.016425 0 0 0 </pose>
+      <pose>0.0 0.03 -0.04 0 0 0</pose>
       <geometry>
         <sphere><radius>1e-7</radius></sphere>
       </geometry>
     </collision>
 
     <collision name='point_collision6'>
-      <pose>0.016425 -0.050450 -0.016425 0 0 0 </pose>
+      <pose>0.0 -0.03 -0.04 0 0 0</pose>
       <geometry>
         <sphere><radius>1e-7</radius></sphere>
       </geometry>
     </collision>
 
     <collision name='point_collision7'>
-      <pose>-0.016425 0.050450 -0.016425 0 0 0 </pose>
+      <pose>0.03 0.0 -0.04 0 0 0</pose>
       <geometry>
         <sphere><radius>1e-7</radius></sphere>
       </geometry>
     </collision>
 
     <collision name='point_collision8'>
-      <pose>-0.016425 -0.050450 -0.016425 0 0 0 </pose>
+      <pose>-0.03 0.0 -0.04 0 0 0</pose>
       <geometry>
         <sphere><radius>1e-7</radius></sphere>
       </geometry>
     </collision>
+    
 
 
    </link>
